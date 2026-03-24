@@ -1,6 +1,7 @@
 package services;
 
 import dao.UserDAO;
+import dao.UserDAOImpl;
 import models.User;
 import java.sql.Connection;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class UserService {
     private UserDAO userDAO;
     public UserService(Connection conn) {
-        userDAO = new UserDAO(conn);
+        userDAO = new UserDAOImpl();
     }
     // lấy danh sách user
     public List<User> getAllUsers() {
