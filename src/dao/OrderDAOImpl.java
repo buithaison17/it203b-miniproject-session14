@@ -60,7 +60,7 @@ public class OrderDAOImpl implements OrderDAO {
             statement3.executeUpdate();
 
             // Tạo các Order Item
-            insertOrderItemDetails(orderId, items);
+            //     insertOrderItemDetails(orderId, items);
 
             connection.commit();
         } catch (SQLException e) {
