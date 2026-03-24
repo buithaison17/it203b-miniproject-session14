@@ -15,4 +15,8 @@ public class ProductService {
     public List<Product> showProducts() {
         return productDAO.getAllProducts();
     }
+
+    public boolean updateStock(int productId, int newQuantity) {
+        return productDAO.updateStock(productId, newQuantity);
+    }
 }
