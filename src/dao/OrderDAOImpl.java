@@ -1,10 +1,12 @@
 package dao;
 
+import models.Order;
 import models.OrderItem;
 import utils.DatabaseConnection;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDAOImpl implements OrderDAO {
@@ -98,6 +100,53 @@ public class OrderDAOImpl implements OrderDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders ORDER BY order_date DESC";
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            
+            while (resultSet.next()) {
+                int orderId = resultSet.getInt("order_id");
+                int userId = resultSet.getInt("user_id");
+                Timestamp timestamp = resultSet.getTimestamp("order_date");
+                double totalAmount = resultSet.getDouble("total_amount");
+                
+                Order order = new Order(orderId, userId, timestamp.toLocalDateTime().toLocalDate(), totalAmount);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<OrderItem> getOrderItemsByOrderId(int orderId) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        String sql = "SELECT * FROM order_items WHERE order_id = ?";
+        try (Connection connection = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            
+            statement.setInt(1, orderId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int orderItemId = resultSet.getInt("order_item_id");
+                    int productId = resultSet.getInt("product_id");
+                    int quantity = resultSet.getInt("quantity");
+                    
+                    OrderItem orderItem = new OrderItem(orderItemId, orderId, productId, quantity);
+                    orderItems.add(orderItem);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orderItems;
     }
 
 }
