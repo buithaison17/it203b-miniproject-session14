@@ -50,4 +50,21 @@ public class ProductDAO {
         }
         return products;
     }
+    // Cập nhật tồn kho sản phẩm
+    public boolean updateStock(int productId, int newQuantity) {
+        String sql = "UPDATE products SET stock = ? WHERE product_id = ?";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, newQuantity);
+            ps.setInt(2, productId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.out.println(" Lỗi khi cập nhật tồn kho: " + e.getMessage());
+            return false;
+        }
+    }
 }
