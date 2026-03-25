@@ -26,4 +26,8 @@ public class UserService {
         // hợp lệ thì gọi DAO để insert
         return userDAO.insert(user);
     }
+
+    public List<User> getTop5Users() {
+        return userDAO.getTop5Users();
+    }
 }

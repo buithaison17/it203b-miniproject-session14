@@ -69,4 +69,36 @@ public class UserDAOImpl implements UserDAO {
         }
         return false;
     }
+
+    public List<User> getTop5Users() {
+        List<User> list = new ArrayList<>();
+        String sql =
+                "SELECT u.user_id, u.full_name, u.address, " +
+                        "SUM(oi.quantity * oi.price) AS total " +
+                        "FROM Users u " +
+                        "JOIN Orders o ON u.user_id = o.user_id " +
+                        "JOIN OrderItems oi ON o.order_id = oi.order_id " +
+                        "GROUP BY u.user_id, u.full_name, u.address " +
+                        "ORDER BY total DESC " +
+                        "LIMIT 5";
+
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("full_name"),
+                        rs.getString("address")
+                );
+                list.add(user);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy top 5 user");
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

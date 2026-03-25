@@ -2,6 +2,8 @@ package views;
 
 import models.User;
 import services.UserService;
+import utils.Input;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,15 +18,19 @@ public class UserView {
         while (true) {
             System.out.println("\n1. Thêm user");
             System.out.println("2. Hiển thị danh sách");
+            System.out.println("3. Hiển thị top 5 user mua nhiều nhất");
             System.out.println("0. Thoát");
             System.out.print("Chọn: ");
-            int choice = Integer.parseInt(sc.nextLine()); // chuỗi thành số nguyên
+            int choice = Input.inputIntegerPositive("Nhập chức năng: ");
             switch (choice) {
                 case 1:
                     addUser();
                     break;
                 case 2:
                     showUsers();
+                    break;
+                case 3:
+                    showTop5Users();
                     break;
                 case 0:
                     return;
@@ -55,6 +61,20 @@ public class UserView {
         List<User> list = userService.getAllUsers();
         System.out.println("\nDanh sách user:");
         // duyệt list và in ra
+        for (User u : list) {
+            System.out.println(
+                    u.getUserId() + " - " + u.getFullName() + " - " + u.getAddress()
+            );
+        }
+    }
+
+    private void showTop5Users() {
+        List<User> list = userService.getTop5Users();
+        System.out.println("\nTop 5 user mua nhiều nhất:");
+        if (list.isEmpty()) {
+            System.out.println("Không có dữ liệu");
+            return;
+        }
         for (User u : list) {
             System.out.println(
                     u.getUserId() + " - " + u.getFullName() + " - " + u.getAddress()
