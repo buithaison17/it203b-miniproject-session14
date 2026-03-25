@@ -23,6 +23,10 @@ public class OrderService {
         this.productDAO = new ProductDAOImpl();
         this.userDAO = new UserDAOImpl();
     }
+//
+//    public void placeOrder() {
+//        orderDAO.placeOrder();
+//    }
 
     public void viewAllOrders() {
         List<Order> orders = orderDAO.getAllOrders();
@@ -34,15 +38,15 @@ public class OrderService {
         System.out.println("\n=== DANH SÁCH ĐƠN HÀNG ===");
         System.out.printf("%-10s %-15s %-15s %-15s%n", "Mã ĐH", "Mã KH", "Ngày đặt", "Tổng tiền");
         System.out.println("------------------------------------------------------------");
-        
+
         for (Order order : orders) {
             User user = userDAO.getUserById(order.getUserId());
             String userName = user != null ? user.getFullName() : "Unknown";
-            System.out.printf("%-10d %-15d %-15s %-15.0f VNĐ%n", 
-                order.getOrderId(), 
-                order.getUserId(), 
-                order.getOrderDate(), 
-                order.getTotalAmount());
+            System.out.printf("%-10d %-15d %-15s %-15.0f VNĐ%n",
+                    order.getOrderId(),
+                    order.getUserId(),
+                    order.getOrderDate(),
+                    order.getTotalAmount());
         }
     }
 
@@ -83,12 +87,12 @@ public class OrderService {
             if (product != null) {
                 double lineTotal = product.getPrice() * item.getQuantity();
                 total += lineTotal;
-                System.out.printf("%-10d %-25s %-10d %-15.0f %-15.0f VNĐ%n", 
-                    product.getProductId(), 
-                    product.getProductName(), 
-                    item.getQuantity(), 
-                    product.getPrice(), 
-                    lineTotal);
+                System.out.printf("%-10d %-25s %-10d %-15.0f %-15.0f VNĐ%n",
+                        product.getProductId(),
+                        product.getProductName(),
+                        item.getQuantity(),
+                        product.getPrice(),
+                        lineTotal);
             }
         }
         System.out.println("--------------------------------------------------------------------------");

@@ -8,7 +8,7 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private String url = "jdbc:mysql://localhost:3306/product_management";
     private String username = "root";
-    private String password = "cocailon$10206";
+    private String password = "sonbui123";
 
     public DatabaseConnection() {
     }

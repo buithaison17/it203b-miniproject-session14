@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class UserView {
     private UserService userService;
     private Scanner sc = new Scanner(System.in);
+
     public UserView(UserService userService) {
         this.userService = userService;
     }
@@ -42,17 +43,49 @@ public class UserView {
 
     // nhập dữ liệu từ người dùng rồi gọi service
     private void addUser() {
-        System.out.print("Tên: ");
-        String name = sc.nextLine();
-        System.out.print("Địa chỉ: ");
-        String address = sc.nextLine();
-        // tạo object user từ input
-        User user = new User(0, name, address);
-        // gọi service xử lý
-        if (userService.addUser(user)) {
-            System.out.println("Thêm thành công");
-        } else {
-            System.out.println("Thêm thất bại");
+        try {
+            System.out.print("Tên: ");
+            String name = sc.nextLine().trim();
+
+            // validate tên
+            if (name.isEmpty()) {
+                System.out.println("Tên không được để trống!");
+                return;
+            }
+            if (name.length() < 3 || name.length() > 50) {
+                System.out.println("Tên phải từ 3 đến 50 ký tự!");
+                return;
+            }
+            if (!name.matches("[a-zA-ZÀ-ỹ\\s]+")) {
+                System.out.println("Tên không hợp lệ (không chứa số/ký tự đặc biệt)!");
+                return;
+            }
+
+            System.out.print("Địa chỉ: ");
+            String address = sc.nextLine().trim();
+
+            // validate địa chỉ
+            if (address.isEmpty()) {
+                System.out.println("Địa chỉ không được để trống!");
+                return;
+            }
+            if (address.length() > 100) {
+                System.out.println("Địa chỉ tối đa 100 ký tự!");
+                return;
+            }
+
+            // tạo object
+            User user = new User(0, name, address);
+
+            // gọi service
+            if (userService.addUser(user)) {
+                System.out.println("Thêm thành công");
+            } else {
+                System.out.println("Thêm thất bại");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Lỗi hệ thống: " + e.getMessage());
         }
     }
 

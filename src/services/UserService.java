@@ -3,19 +3,23 @@ package services;
 import dao.UserDAO;
 import dao.UserDAOImpl;
 import models.User;
+
 import java.sql.Connection;
 import java.util.List;
 
 public class UserService {
     private UserDAO userDAO;
-    public UserService(Connection conn) {
-        userDAO = new UserDAOImpl();
+
+    public UserService(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
+
     // lấy danh sách user
     public List<User> getAllUsers() {
         // chỉ gọi xuống DAO để lấy dữ liệu
         return userDAO.findAll();
     }
+
     // thêm user
     public boolean addUser(User user) {
         // kiểm tra dữ liệu trước khi cho xuống DB
